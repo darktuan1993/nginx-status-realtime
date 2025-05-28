@@ -1,4 +1,5 @@
 import React from 'react';
+import { BsGlobe } from 'react-icons/bs';
 import {
     Box,
     Typography,
@@ -8,6 +9,9 @@ import {
     TableRow,
     TableCell,
     TableContainer,
+    Card,
+    CardHeader,
+    CardContent,
     Paper,
     Tooltip,
 } from '@mui/material';
@@ -29,6 +33,8 @@ export default function DetailTable({ domain }) {
         requests,
         rps,
         avg_response_ms,
+        error_rate,
+        avg_req_size,
         response_1xx,
         response_2xx,
         response_3xx,
@@ -46,7 +52,7 @@ export default function DetailTable({ domain }) {
         (response_5xx || 0);
 
     const headerTooltips = [
-        { label: 'Tổng số', tip: 'Tổng số lượng request' },
+        { label: 'Tổng', tip: 'Tổng số lượng request' },
         { label: 'Req/s', tip: 'Request trên mỗi giây' },
         { label: 'Time', tip: 'Thời gian phản hồi trung bình' },
         { label: '1xx', tip: 'Thông tin response' },
@@ -54,7 +60,7 @@ export default function DetailTable({ domain }) {
         { label: '3xx', tip: 'Chuyển hướng' },
         { label: '4xx', tip: 'Lỗi phía client' },
         { label: '5xx', tip: 'Lỗi phía server' },
-        { label: 'Tổng', tip: 'Tổng số status code' },
+        { label: 'RSA', tip: 'Request size trung bình' },
         { label: 'Sent', tip: 'Dữ liệu gửi đi' },
         { label: 'Rcvd', tip: 'Dữ liệu nhận về' },
         { label: 'Sent/s', tip: 'Tốc độ gửi dữ liệu' },
@@ -75,10 +81,20 @@ export default function DetailTable({ domain }) {
 
     return (
         <Box>
-            <Typography variant="h6" gutterBottom>
+            <CardHeader
+                title={
+                    <Box display="flex" alignItems="center" gap={1}>
+                        <BsGlobe />
+                        <Typography variant="subtitle1" color="white">
+                            Chi tiết tên miền
+                        </Typography>
+                    </Box>
+                }
+                sx={{ bgcolor: 'primary.main', color: 'white', py: 1.5 }}
+            />
+            <Typography variant="body1" sx={{ mb: 2, mt: 1 }}>
                 Thống kê tên miền: <Typography component="span" color="primary" fontWeight={700}>{domain_name}</Typography>
             </Typography>
-
             <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2, boxShadow: 3 }}>
                 <Table size="small" sx={{ borderCollapse: 'collapse' }}>
                     <TableHead>
@@ -92,10 +108,10 @@ export default function DetailTable({ domain }) {
                             <TableCell colSpan={3} align="center" sx={{ fontWeight: 'bold', bgcolor: 'primary.main', color: 'white', border: '1px solid #ddd' }}>
                                 Requests
                             </TableCell>
-                            <TableCell colSpan={6} align="center" sx={{ fontWeight: 'bold', bgcolor: 'primary.main', color: 'white', border: '1px solid #ddd' }}>
+                            <TableCell colSpan={5} align="center" sx={{ fontWeight: 'bold', bgcolor: 'primary.main', color: 'white', border: '1px solid #ddd' }}>
                                 Mã trạng thái
                             </TableCell>
-                            <TableCell colSpan={3} align="center" sx={{ fontWeight: 'bold', bgcolor: 'primary.main', color: 'white', border: '1px solid #ddd' }}>
+                            <TableCell colSpan={4} align="center" sx={{ fontWeight: 'bold', bgcolor: 'primary.main', color: 'white', border: '1px solid #ddd' }}>
                                 Băng thông
                             </TableCell>
                         </TableRow>
@@ -121,7 +137,7 @@ export default function DetailTable({ domain }) {
                             <TableCell sx={{ border: '1px solid #ddd' }}>{domain_name}</TableCell>
                             <CellWithHighlight value={requests} />
                             <TableCell align="center" sx={{ border: '1px solid #ddd' }}>{rps}</TableCell>
-                            <TableCell align="center" sx={{ border: '1px solid #ddd' }}>{avg_response_ms}ms</TableCell>
+                            <TableCell align="center" sx={{ border: '1px solid #ddd' }}>{avg_response_ms}s</TableCell>
                             <TableCell align="center" sx={{ border: '1px solid #ddd' }}>{response_1xx || 0}</TableCell>
                             <TableCell align="center" sx={{ border: '1px solid #ddd', fontWeight: 'bold', color: 'green' }}>{response_2xx || 0}</TableCell>
                             <TableCell align="center" sx={{ border: '1px solid #ddd' }}>{response_3xx || 0}</TableCell>
@@ -131,7 +147,7 @@ export default function DetailTable({ domain }) {
                             <TableCell align="center" sx={{ border: '1px solid #ddd', color: response_5xx > 0 ? 'red' : 'inherit' }}>
                                 {response_5xx > 0 && <WarningAmberIcon fontSize="small" sx={{ verticalAlign: 'middle', mr: 0.5 }} />}{response_5xx || 0}
                             </TableCell>
-                            <TableCell align="center" sx={{ border: '1px solid #ddd' }}>{total_status}</TableCell>
+                            <TableCell align="center" sx={{ border: '1px solid #ddd' }}>{formatBytes(avg_req_size)}</TableCell>
                             <TableCell align="center" sx={{ border: '1px solid #ddd' }}>{formatBytes(bytes_sent)}</TableCell>
                             <TableCell align="center" sx={{ border: '1px solid #ddd' }}>{formatBytes(bytes_received)}</TableCell>
                             <TableCell align="center" sx={{ border: '1px solid #ddd' }}>0 B</TableCell>

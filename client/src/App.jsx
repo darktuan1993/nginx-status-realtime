@@ -22,6 +22,7 @@ export default function App() {
 
   useEffect(() => {
     const socket = new WebSocket('ws://localhost:8080');
+    
     socket.onmessage = (event) => {
       try {
         setData(JSON.parse(event.data));
@@ -34,6 +35,7 @@ export default function App() {
   
   useEffect(() => {
     if (data && selectedDomain?.domain_name) {
+    
       const updated = data.accessed_vhosts?.find(
         (d) => d.domain_name === selectedDomain.domain_name
       );
@@ -45,7 +47,7 @@ export default function App() {
   return (
     <Container maxWidth="xl" sx={{ py: 4, minHeight: '100vh', bgcolor: 'background.default' }}>
       <Typography variant="h4" component="h1" align="center" gutterBottom color="primary">
-        NGINX STATUS DASHBOARD
+        THEO DÕI TÊN MIỀN
       </Typography>
 
       {data && (

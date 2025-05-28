@@ -7,7 +7,7 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-const NGINX_STATUS_URL = 'https://dev-domain-status.bravo.com.vn/status/format/json';
+const NGINX_STATUS_URL = 'http://192.168.140.77:8080/metrics'; // Replace with your Nginx status URL
 const INTERVAL_MS = 1000;
 
 let latestData = null;

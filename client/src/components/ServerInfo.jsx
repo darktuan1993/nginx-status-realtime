@@ -22,7 +22,6 @@ import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturi
 
 export default function ServerInfo({ data }) {
   const uptime = data.nowMsec - data.loadMsec;
-  const uptimeSeconds = Math.floor(uptime / 1000);
 
   function formatUptime(seconds) {
     const days = Math.floor(seconds / (3600 * 24));
