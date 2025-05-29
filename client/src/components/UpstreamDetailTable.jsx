@@ -60,7 +60,7 @@ export default function UpstreamDetailTable({ locationData, domain }) {
                     <Box key={path} mb={3}>
                         <Typography variant="body2" color="info.dark" sx={{ mb: 0.5 }}>
                             <b>Location Path:</b> <>{path} ---------- Domain: {domain?.domain_name
-                                ? <strong>{`http://${domain.domain_name}${path}`}</strong>
+                                ? <strong>{`https://${domain.domain_name}${path}`}</strong>
                                 : <em>Chưa có tên miền</em>}
                                 {' '}</>
                         </Typography>

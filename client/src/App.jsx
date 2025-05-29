@@ -47,7 +47,7 @@ export default function App() {
   return (
     <Container maxWidth="xl" sx={{ py: 4, minHeight: '100vh', bgcolor: 'background.default' }}>
       <Typography variant="h4" component="h1" align="center" gutterBottom color="primary">
-        THEO DÕI TÊN MIỀN
+        THEO DÕI TÊN MIỀN - Development by TuanBach
       </Typography>
 
       {data && (
