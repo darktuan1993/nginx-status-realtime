@@ -19,8 +19,10 @@ export default function CellWithHighlight({ value, align = 'center', sx = {}, ..
       align={align}
       sx={{
         border: '1px solid #ddd',
-        transition: 'background-color 0.4s',
-        backgroundColor: highlight ? 'rgba(255, 241, 118, 0.5)' : 'inherit',
+        fontWeight: 600,
+        color: highlight ? 'green' : 'green',
+        transition: 'background-color 0.1ms',
+        backgroundColor: highlight ? 'rgba(52, 255, 79, 0.5)' : 'inherit',
         ...sx,
       }}
       {...rest}

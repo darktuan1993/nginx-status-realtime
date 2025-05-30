@@ -1,35 +1,46 @@
 import React from 'react';
 import DomainDetailTable from './DomainDetailTable';
 import UpstreamDetailTable from './UpstreamDetailTable';
-import { Box, CardHeader, Typography } from '@mui/material';
+import { Box, Card, CardHeader, Divider, Typography } from '@mui/material';
 import { BsGlobe } from 'react-icons/bs';
 
 export default function DetailTable({ domain }) {
-    // console.log('Domain Detail:', domain);
-    
     if (!domain) return null;
 
     return (
-        <Box>
+        <Card elevation={4} sx={{ borderRadius: 4, overflow: 'hidden' }}>
             <CardHeader
                 title={
                     <Box display="flex" alignItems="center" gap={1}>
-                        <BsGlobe />
-                        <Typography variant="subtitle1" color="white">
+                        <BsGlobe size={20} />
+                        <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'white' }}>
                             Chi tiết tên miền
                         </Typography>
                     </Box>
                 }
-                sx={{ bgcolor: 'primary.main', color: 'white', py: 1.5 }}
+                sx={{
+                    bgcolor: 'primary.main',
+                    py: 2,
+                    px: 3,
+                    color: 'white',
+                }}
             />
 
-            <DomainDetailTable domain={domain} />
+            <Box px={3} py={2}>
+                <DomainDetailTable domain={domain} />
+            </Box>
 
             {domain.location_path && Object.keys(domain.location_path).length > 0 && (
-                <Box mt={4}>
-                    <UpstreamDetailTable locationData={domain.location_path} domain={domain} />
-                </Box>
+                <>
+                    <Divider sx={{ my: 2 }} />
+                    <Box px={3} pb={3}>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 2 }}>
+                            Thông tin Upstream
+                        </Typography>
+                        <UpstreamDetailTable locationData={domain.location_path} domain={domain} />
+                    </Box>
+                </>
             )}
-        </Box>
+        </Card>
     );
 }

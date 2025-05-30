@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BsGlobe } from 'react-icons/bs';
+import { BsGlobe2 } from 'react-icons/bs';
 import {
   Card,
   CardHeader,
@@ -12,9 +12,6 @@ import {
   Typography,
   Chip,
   Box,
-  Collapse,
-  Divider,
-  Grid,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -27,6 +24,7 @@ function formatBytes(bytes) {
 
 export default function DomainListSidebar({ accessed_vhosts, onSelect }) {
   const [search, setSearch] = useState('');
+  const [selectedDomain, setSelectedDomain] = useState(null);
 
   const filtered = (accessed_vhosts || []).filter(
     (item) =>
@@ -34,20 +32,25 @@ export default function DomainListSidebar({ accessed_vhosts, onSelect }) {
       item.domain_name.toLowerCase().includes(search.toLowerCase())
   );
 
+  const handleSelect = (item) => {
+    setSelectedDomain(item.domain_name);
+    onSelect?.(item);
+  };
+
   return (
-    <Card elevation={3} sx={{ width: '100%' }}>
+    <Card elevation={4} sx={{ width: '100%', borderRadius: 3 }}>
       <CardHeader
         title={
           <Box display="flex" alignItems="center" gap={1}>
-            <BsGlobe />
-            <Typography variant="subtitle1" color="white">
+            <BsGlobe2 size={18} />
+            <Typography variant="h6" color="white" fontWeight="bold">
               Danh sách Tên Miền
             </Typography>
           </Box>
         }
-        sx={{ bgcolor: 'primary.main', color: 'white', py: 1.5 }}
+        sx={{ bgcolor: 'primary.main', color: 'white', py: 1.5, px: 2 }}
       />
-      <CardContent>
+      <CardContent sx={{ pt: 1 }}>
         <TextField
           fullWidth
           placeholder="Tìm kiếm tên miền..."
@@ -65,31 +68,46 @@ export default function DomainListSidebar({ accessed_vhosts, onSelect }) {
         />
 
         <List disablePadding>
-          {filtered.map((item, i) => (
-            <ListItem
-              button
-              key={i}
-              onClick={() => onSelect?.(item)} // 🌟 gọi callback khi chọn
-              sx={{
-                px: 2,
-                py: 1,
-                '&:hover': { bgcolor: '#f5f5f5' },
-              }}
-            >
-              <ListItemIcon sx={{ minWidth: 30, color: 'primary.main' }}>
-                <BsGlobe />
-              </ListItemIcon>
-              <Box flexGrow={1}>
-                <Typography fontWeight={500} fontSize="0.875rem">
-                  {item.domain_name}
-                </Typography>
-                <Typography variant="caption" color="text.secondary">
-                  Tổng: {item.requests} • RPS: {item.rps} • Time: {item.avg_response_ms}ms
-                </Typography>
-              </Box>
-              <Chip label="Online" color="success" size="small" />
-            </ListItem>
-          ))}
+          {filtered.map((item, i) => {
+            const isSelected = selectedDomain === item.domain_name;
+            const isDown = item.error_rate > 30;
+
+            return (
+              <ListItem
+                key={i}
+                onClick={() => handleSelect(item)}
+                sx={{
+                  px: 2,
+                  py: 1.5,
+                  bgcolor: isSelected ? 'primary.light' : 'transparent',
+                  borderLeft: isSelected ? '4px solid #1976d2' : '4px solid transparent',
+                  '&:hover': {
+                    bgcolor: isSelected ? 'primary.light' : '#f9f9f9',
+                    cursor: 'pointer',
+                  },
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                <ListItemIcon sx={{ minWidth: 30, color: 'primary.main' }}>
+                  <BsGlobe2 size={16} />
+                </ListItemIcon>
+                <Box flexGrow={1}>
+                  <Typography fontWeight={600} fontSize="0.9rem">
+                    {item.domain_name}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                    Tổng: {item.requests} • RPS: {item.rps} • Time: {item.avg_response_ms}ms
+                  </Typography>
+                </Box>
+                <Chip
+                  label={isDown ? 'Warning' : 'Healthy'}
+                  color={isDown ? 'warning' : 'success'}
+                  size="small"
+                  variant={isSelected ? 'filled' : 'outlined'}
+                />
+              </ListItem>
+            );
+          })}
         </List>
       </CardContent>
     </Card>

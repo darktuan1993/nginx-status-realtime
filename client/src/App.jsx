@@ -4,6 +4,8 @@ import DomainListSidebar from './components/DomainListSidebar';
 import DetailTable from './components/DetailTable';
 import { Container, Typography, Grid, Paper, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import './App.css';
+
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -47,7 +49,7 @@ export default function App() {
   return (
     <Container maxWidth="xl" sx={{ py: 4, minHeight: '100vh', bgcolor: 'background.default' }}>
       <Typography variant="h4" component="h1" align="center" gutterBottom color="primary">
-        THEO DÕI TÊN MIỀN - Development by TuanBach
+        QUẢN TRỊ TÊN MIỀN
       </Typography>
 
       {data && (
